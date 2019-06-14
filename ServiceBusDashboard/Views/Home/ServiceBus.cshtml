@@ -1,8 +1,10 @@
 ﻿@using ServiceBusDashboard.Code
-@model SbConnectionString
+@using ServiceBusDashboard.Model
+@model SbConnectionStringInfo
 
 <div class="container-fluid">
-    <h1>@Model.Name</h1>
+    <h1>@Model.ConnectionStringGroup</h1>
+    <h2>@Model.ConnectionStringName</h2>
     <div class="row">
         <div class="col-sm-12">
             <div class="input-group">
@@ -54,7 +56,7 @@
             refreshed = null;
             $('#status').html("Refreshing...");
 
-            $.get('/dashboard/@Model.Name')
+            $.get('/dashboard/@Model.ConnectionStringGroup/@Model.ConnectionStringName')
                 .done(function(data) {
                     refreshed = moment();
                     $('#container').html(data);

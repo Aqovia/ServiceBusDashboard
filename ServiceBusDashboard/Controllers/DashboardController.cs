@@ -17,21 +17,23 @@ namespace ServiceBusDashboard.Controllers
     public class DashboardController : ApiController
     {
         [HttpGet]
-        [Route("{serviceBusName}")]
-        public IHttpActionResult Get(string serviceBusName)
+        [Route("{groupName}/{name}")]
+        public IHttpActionResult Get(string groupName, string name)
         {
-            var sbConnectionString = SbConnectionStrings.Instance.ConnectionStrings.FirstOrDefault(x => x.Name == serviceBusName);
-            if (sbConnectionString == null)
+            var connectionStringInfo = SbConnectionStringsLoader.Instance.FindConnectionString(groupName, name);
+            if (connectionStringInfo == null)
                 return NotFound();
 
-            var namespaceManager = NamespaceManager.CreateFromConnectionString(sbConnectionString.ConnectionString);
+            var namespaceManager = NamespaceManager.CreateFromConnectionString(connectionStringInfo.ConnectionString);
 
             var queues = namespaceManager.GetQueues();
             var topics = namespaceManager.GetTopics();
 
             var data = new SbDashboardModel()
             {
-                ConnectionString = sbConnectionString,
+                ConnectionStringGroup = connectionStringInfo.ConnectionStringGroup,
+                ConnectionStringName = connectionStringInfo.ConnectionStringName,
+                ConnectionString = connectionStringInfo.ConnectionString,
                 Queues = queues
                     .Where(x => !SbUtil.IsQueueIgnored(x.Path))
                     .Select(x => new SbQueue()

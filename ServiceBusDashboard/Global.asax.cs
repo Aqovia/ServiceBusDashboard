@@ -20,7 +20,7 @@ namespace ServiceBusDashboard
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            SbConnectionStrings.Instance.Load();
+            SbConnectionStringsLoader.Instance.Reload();
         }
     }
 }

@@ -145,6 +145,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Model\CountContainer.cs" />
+    <Compile Include="Model\SbConnectionStringInfo.cs" />
     <Compile Include="Model\SbDashboardModel.cs" />
     <Compile Include="Model\SbExcludingSubscription.cs" />
     <Compile Include="Model\SbQueue.cs" />

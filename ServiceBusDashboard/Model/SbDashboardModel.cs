@@ -8,7 +8,9 @@ namespace ServiceBusDashboard.Model
 {
     public class SbDashboardModel
     {
-        public SbConnectionString ConnectionString { get; set; }
+        public string ConnectionStringGroup { get; set; }
+        public string ConnectionStringName { get; set; }
+        public string ConnectionString { get; set; }
         public SbQueue[] Queues { get; set; }
         public SbTopic[] Topics { get; set; }
 

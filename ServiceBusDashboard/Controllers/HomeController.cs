@@ -13,18 +13,18 @@ namespace ServiceBusDashboard.Controllers
     {
         public ActionResult Index()
         {
-            return View(SbConnectionStrings.Instance.ConnectionStrings);
+            return View(SbConnectionStringsLoader.Instance.ConnectionStrings);
         }
 
         public ActionResult ReloadList()
         {
-            SbConnectionStrings.Instance.Load();
+            SbConnectionStringsLoader.Instance.Reload();
             return RedirectToAction("Index");
         }
 
-        public ActionResult ServiceBus(string name)
+        public ActionResult ServiceBus(string groupName, string name)
         {
-            return View(SbConnectionStrings.Instance.ConnectionStrings.FirstOrDefault(x => x.Name == name));
+            return View(SbConnectionStringsLoader.Instance.FindConnectionString(groupName, name));
         }
     }
 }
