@@ -1,0 +1,17 @@
+{
+    "Groups":
+    {
+        "Name": "Group 1",
+        "Items":
+        [
+            {
+                "Name": "Sample",
+                "ConnectionString": "your service bus connection string"
+            },
+            {
+                "Name": "Another example",
+                "ConnectionString": "your service bus connection string"
+            }
+        ]
+    }
+}

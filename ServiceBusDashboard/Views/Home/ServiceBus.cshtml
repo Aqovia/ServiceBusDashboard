@@ -1,0 +1,71 @@
+﻿@using ServiceBusDashboard.Code
+@using ServiceBusDashboard.Model
+@model SbConnectionStringInfo
+
+<div class="container-fluid">
+    <h1>@Model.ConnectionStringGroup</h1>
+    <h2>@Model.ConnectionStringName</h2>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="input-group">
+                <input class="form-control" rel="tooltip" title="@Model.ConnectionString" value="@Model.ConnectionString" readonly="readonly" />
+                <div class="input-group-append">
+                    <button onclick="getDashboard()" class="btn btn-primary" type="button">Refresh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="status"></div>
+    <div id="container"></div>
+</div>
+@section scripts {
+    <script type="text/javascript">
+        var refreshed = null;
+        var createdTimeout = null;
+        $(function() {
+            setInterval(() => { updateStatus(); }, 500);
+            getDashboard();
+        });
+
+        function next() {
+            if (createdTimeout !== null) {
+                clearTimeout(createdTimeout);
+            }
+
+            @if (Config.RefreshEvery >= 0)
+            {
+                var miliSeconds = Config.RefreshEvery * 1000;
+                <text>
+                    createdTimeout = setTimeout(() => { getDashboard(); }, @miliSeconds);
+                </text>
+            }
+        }
+
+        function updateStatus() {
+            if (refreshed !== null) {
+                var diff = moment().seconds(moment().diff(refreshed, 'seconds'));
+                $('#status').html("Refreshed: " + (diff.format('s [seconds ago]')));
+            }
+        }
+
+        function getDashboard() {
+            if (createdTimeout !== null) {
+                clearTimeout(createdTimeout);
+            }
+
+            refreshed = null;
+            $('#status').html("Refreshing...");
+
+            $.get('/dashboard/@Model.ConnectionStringGroup/@Model.ConnectionStringName')
+                .done(function(data) {
+                    refreshed = moment();
+                    $('#container').html(data);
+                    updateStatus();
+                    next();
+                })
+                .fail(function(jqXhr, textStatus, errorThrown) {
+                    $('#container').html("Error: " + errorThrown);
+                });
+        }
+    </script>
+}
